@@ -35,5 +35,4 @@ Thumbs.db
 *.tmp
 *.temp
 
-On Thu, Oct 1, 2026, 12:03 AM Sarika Bhabad <sarikabhabad4214@gmail.com> wrote:
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+# On Thu, Oct 1, 2026, 12:03 AM Sarika Bhabad <sarikabhabad4214@gmail.com> wrote:
