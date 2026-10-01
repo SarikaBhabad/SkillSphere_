@@ -1,0 +1,17 @@
+/* Tablet */
+@media (max-width: 1024px) {
+  .card {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  .card {
+    padding: var(--spacing-md);
+  }
+}

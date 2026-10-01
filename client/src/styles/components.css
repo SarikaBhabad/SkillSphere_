@@ -1,0 +1,144 @@
+/* Buttons */
+.btn {
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Cards */
+.card {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar{
+    height: 64px;
+    padding: 0 var(--spacing-lg);
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+  
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+}
+
+.sidebar{
+    width: 240px;
+    padding: var(--spacing-lg);
+    background-color: var(--surface-color);
+    border-right: 1px solid var(--border-color);
+
+}
+
+.sidebar nav{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+
+}
+.sidebar a{
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    color: var(--primary-color);
+}
+.main-content{
+    flex: 1;
+    padding: var(--spacing-xl);
+}
+/* Dashboard */
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.welcome-section {
+  background-color: var(--surface-color);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.welcome-section h1 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.welcome-section p {
+  color: var(--text-secondary);
+}
+
+/* Statistics */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+}
+
+.stats-grid .card h3 {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.stats-grid .card p {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Dashboard Sections */
+
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.dashboard-section h2 {
+  font-size: 20px;
+}
+
+/* Skill Progress */
+
+.dashboard-section progress {
+  width: 100%;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Quick Actions */
+
+.quick-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+/* Quick Actions */
+.quick-actions {
+  margin-top: var(--spacing-xl);
+}
+
+.quick-actions h2 {
+  margin-bottom: var(--spacing-md);
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
