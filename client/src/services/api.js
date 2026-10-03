@@ -9,3 +9,27 @@ export const checkBackendHealth = async () => {
 
   return response.json();
 };
+export const getSkills = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/skills`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch skills");
+  }
+
+  return response.json();
+};
+export const createSkill = async (skillData) => {
+  const response = await fetch(`${API_BASE_URL}/api/skills`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(skillData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create skill");
+  }
+
+  return response.json();
+};
