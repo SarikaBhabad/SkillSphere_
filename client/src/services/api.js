@@ -33,3 +33,30 @@ export const createSkill = async (skillData) => {
 
   return response.json();
 };
+export const updateSkill = async (id, skillData) => {
+  const response = await fetch(`${API_BASE_URL}/api/skills/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(skillData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update skill");
+  }
+
+  return response.json();
+};
+
+export const deleteSkill = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/api/skills/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete skill");
+  }
+
+  return response.json();
+};

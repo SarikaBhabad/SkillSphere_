@@ -1,106 +1,239 @@
 import React, { useEffect, useState } from "react";
-import {createSkill, getSkills } from "../../services/api";
+import {
+  getSkills,
+  createSkill,
+  updateSkill,
+  deleteSkill,
+} from "../../services/api";
 
 const Skills = () => {
   const [skills, setSkills] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [editId, setEditId] = useState(null);
 
-  const [name, setName] = useState("");
-const [category, setCategory] = useState("");
-const [level, setLevel] = useState("Beginner");
-  const handleAddSkill = () => {
-    setShowForm(true);
-  };
-  const handleSaveSkill = async () => {
-  try {
-    const newSkill = {
-      name,
-      category,
-      level,
-    };
+  const [skillData, setSkillData] = useState({
+    name: "",
+    category: "",
+    level: "Beginner",
+    progress: 0,
+    description: "",
+  });
 
-    const response = await createSkill(newSkill);
-
-    setSkills((prevSkills) => [response.data, ...prevSkills]);
-
-    setName("");
-    setCategory("");
-    setLevel("Beginner");
-    setShowForm(false);
-  } catch (error) {
-    console.error("Error creating skill:", error);
-  }
-};
+  const userId = "6ac0be98fc75156c4fba4258";
 
   useEffect(() => {
-    const loadSkills = async () => {
-      try {
-        const response = await getSkills();
-        setSkills(response.data);
-      } catch (error) {
-        console.error("Error loading skills:", error);
-      }
-    };
-
     loadSkills();
   }, []);
 
+  const loadSkills = async () => {
+    try {
+      const response = await getSkills();
+      setSkills(response.data);
+    } catch (error) {
+      console.error("Error loading skills:", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    setSkillData({
+      ...skillData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleAddSkill = () => {
+    setEditId(null);
+
+    setSkillData({
+      name: "",
+      category: "",
+      level: "Beginner",
+      progress: 0,
+      description: "",
+    });
+
+    setShowForm(true);
+  };
+
+  const handleEditSkill = (skill) => {
+    setEditId(skill._id);
+
+    setSkillData({
+      name: skill.name,
+      category: skill.category,
+      level: skill.level,
+      progress: skill.progress,
+      description: skill.description || "",
+    });
+
+    setShowForm(true);
+  };
+
+  const handleSaveSkill = async () => {
+    try {
+      const skillPayload = {
+        user: userId,
+        name: skillData.name,
+        category: skillData.category,
+        level: skillData.level,
+        progress: Number(skillData.progress),
+        description: skillData.description,
+      };
+
+      if (editId) {
+        const response = await updateSkill(editId, skillPayload);
+
+        setSkills((prevSkills) =>
+          prevSkills.map((skill) =>
+            skill._id === editId ? response.data : skill
+          )
+        );
+      } else {
+        const response = await createSkill(skillPayload);
+
+        setSkills((prevSkills) => [response.data, ...prevSkills]);
+      }
+
+      setSkillData({
+        name: "",
+        category: "",
+        level: "Beginner",
+        progress: 0,
+        description: "",
+      });
+
+      setEditId(null);
+      setShowForm(false);
+    } catch (error) {
+      console.error("Error saving skill:", error);
+    }
+  };
+
+  const handleDeleteSkill = async (id) => {
+    try {
+      await deleteSkill(id);
+
+      setSkills((prevSkills) =>
+        prevSkills.filter((skill) => skill._id !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting skill:", error);
+    }
+  };
+
   return (
     <div className="skills-page">
+      {/* Page Header */}
       <div className="skills-header">
         <div>
-          <h1>My Skills</h1>
+          <h1>Skills</h1>
           <p>Track and manage your technical skills.</p>
         </div>
 
-        <button className="add-skill-btn" onClick={handleAddSkill}>
+        <button className="btn btn-primary" onClick={handleAddSkill}>
           + Add Skill
         </button>
       </div>
 
+      {/* Add/Edit Form */}
       {showForm && (
-        <div className="add-skill-form">
-          <h2>Add New Skill</h2>
+        <div className="card">
+          <h2>{editId ? "Edit Skill" : "Add Skill"}</h2>
 
           <input
             type="text"
-            placeholder="Skill name"
-             value={name}
-  onChange={(e) => setName(e.target.value)}
+            name="name"
+            placeholder="Skill Name"
+            value={skillData.name}
+            onChange={handleChange}
           />
 
           <input
             type="text"
+            name="category"
             placeholder="Category"
-            value={category}
-  onChange={(e) => setCategory(e.target.value)}
+            value={skillData.category}
+            onChange={handleChange}
           />
-          <select
-  value={level}
-  onChange={(e) => setLevel(e.target.value)}
->
-  <option value="Beginner">Beginner</option>
-  <option value="Intermediate">Intermediate</option>
-  <option value="Advanced">Advanced</option>
-  <option value="Expert">Expert</option>
-</select>
 
-          <button type="button" onClick={handleSaveSkill}>
-            Save Skill
+          <select
+            name="level"
+            value={skillData.level}
+            onChange={handleChange}
+          >
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Expert">Expert</option>
+          </select>
+
+          <input
+            type="number"
+            name="progress"
+            placeholder="Progress %"
+            min="0"
+            max="100"
+            value={skillData.progress}
+            onChange={handleChange}
+          />
+
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={skillData.description}
+            onChange={handleChange}
+          />
+
+          <button className="btn btn-primary" onClick={handleSaveSkill}>
+            {editId ? "Update Skill" : "Save Skill"}
+          </button>
+
+          <button
+            className="btn"
+            onClick={() => {
+              setShowForm(false);
+              setEditId(null);
+            }}
+          >
+            Cancel
           </button>
         </div>
       )}
 
-      <div className="skills-list">
+      {/* Skills List */}
+      <div className="skill-list">
         {skills.length === 0 ? (
           <p>No skills added yet.</p>
         ) : (
           skills.map((skill) => (
-            <div key={skill._id}>
+            <div className="card skill-card" key={skill._id}>
               <h3>{skill.name}</h3>
+
               <p>{skill.category}</p>
-              <p>{skill.level}</p>
-              <p>{skill.progress}%</p>
+
+              <p>Level: {skill.level}</p>
+
+              <p>Progress: {skill.progress}%</p>
+
+              <progress value={skill.progress} max="100"></progress>
+
+              {skill.description && <p>{skill.description}</p>}
+
+              <div className="skill-actions">
+                <button
+                  className="btn"
+                  onClick={() => handleEditSkill(skill)}
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="btn"
+                  onClick={() => handleDeleteSkill(skill._id)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))
         )}
