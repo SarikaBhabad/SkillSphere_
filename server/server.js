@@ -1,3 +1,4 @@
+require("dns").setServers(["8.8.8.8"])
 const app = require("./app");
 const connectDB = require("./config/db");
 require("dotenv").config();
